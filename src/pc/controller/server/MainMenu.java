@@ -17,12 +17,15 @@ import javax.swing.JOptionPane;
  *
  * @author Sameer
  */
+
 public class MainMenu extends javax.swing.JFrame {
+    public static String conStatus ="Not Connected";
 
     /**
      * Creates new form MainMenu
      */
     InetAddress addr;
+    
     
     int portNo = 4444;
     String ipAddress ="";
@@ -32,7 +35,7 @@ public class MainMenu extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
-        setIpAddress();
+       setIpAddress();
         con = new ServerConnection();
         con.connectionEstablishing(portNo);
         
@@ -55,19 +58,24 @@ public class MainMenu extends javax.swing.JFrame {
                 Enumeration<InetAddress> addresses = iface.getInetAddresses();
                 while(addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
-                    if(position ==1)
+                    position++;
+                   if(position ==4)
                     {
                         ipAddressTxtField.setText(iface.getDisplayName()+" : "+addr.getHostAddress());
-                        position++;
+                       
                         break;
-                    }
+                   }
+                    
                 }
                 
                 
             }
         } catch (SocketException e) {
             throw new RuntimeException(e);
+            
         }
+    
+    
             
         
             
@@ -79,6 +87,7 @@ public class MainMenu extends javax.swing.JFrame {
         
         
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -95,6 +104,8 @@ public class MainMenu extends javax.swing.JFrame {
         downPanel = new javax.swing.JPanel();
         ipAddressLabel = new javax.swing.JLabel();
         ipAddressTxtField = new javax.swing.JTextField();
+        connectionStatusLabel1 = new javax.swing.JLabel();
+        conStatusTextField = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -136,15 +147,26 @@ public class MainMenu extends javax.swing.JFrame {
 
         ipAddressTxtField.setEditable(false);
 
+        connectionStatusLabel1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        connectionStatusLabel1.setText("Connection Status");
+
+        conStatusTextField.setEditable(false);
+        conStatusTextField.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        conStatusTextField.setText(" ");
+
         javax.swing.GroupLayout downPanelLayout = new javax.swing.GroupLayout(downPanel);
         downPanel.setLayout(downPanelLayout);
         downPanelLayout.setHorizontalGroup(
             downPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(downPanelLayout.createSequentialGroup()
                 .addGap(60, 60, 60)
-                .addComponent(ipAddressLabel)
+                .addGroup(downPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(connectionStatusLabel1)
+                    .addComponent(ipAddressLabel))
                 .addGap(18, 18, 18)
-                .addComponent(ipAddressTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(downPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(ipAddressTxtField)
+                    .addComponent(conStatusTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         downPanelLayout.setVerticalGroup(
@@ -154,7 +176,11 @@ public class MainMenu extends javax.swing.JFrame {
                 .addGroup(downPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ipAddressLabel)
                     .addComponent(ipAddressTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(448, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(downPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(connectionStatusLabel1)
+                    .addComponent(conStatusTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(416, Short.MAX_VALUE))
         );
 
         ipAddressLabel.getAccessibleContext().setAccessibleName("");
@@ -238,8 +264,11 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JTextField conStatusTextField;
+    private javax.swing.JLabel connectionStatusLabel1;
     private javax.swing.JPanel downPanel;
     private javax.swing.JLabel ipAddressLabel;
     private javax.swing.JTextField ipAddressTxtField;
