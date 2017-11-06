@@ -179,7 +179,7 @@ public class ServerConnection {
                                 break;
                         }
                     } else {
-                       JOptionPane.showMessageDialog(null,"Module is invalid");
+                         MainMenu. conStatusTextField.setText("Module is invalid");
                         break;
                     }
                 } catch (Exception e) {

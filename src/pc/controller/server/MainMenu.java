@@ -59,7 +59,7 @@ public class MainMenu extends javax.swing.JFrame {
                 while(addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
                     position++;
-                   if(position ==4)
+                   //if(position ==3)
                     {
                         ipAddressTxtField.setText(iface.getDisplayName()+" : "+addr.getHostAddress());
                        
