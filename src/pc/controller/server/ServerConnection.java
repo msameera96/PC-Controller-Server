@@ -41,6 +41,9 @@ public class ServerConnection {
     char readChar;
     String readLn;
     String readMenu;
+    String message, filePath, fileName;
+    FileAPI fileAPI = new FileAPI();
+    VolumeController volumeController= new VolumeController();
    // DataInputStream dis;
    
     
@@ -176,6 +179,34 @@ public class ServerConnection {
                            
                             case "SCREENSHOT_REQUEST":
                                 new Screenshot().sendScreenshot(objectOutputStream);
+                                break;
+                                
+                                 case "FILE_DOWNLOAD_LIST_FILES":
+                                filePath = (String) ServerConnection.objectInputStream.readObject();
+                                if (filePath.equals("/")) {
+                                    filePath = fileAPI.getHomeDirectoryPath();
+                                }
+                                new SendFileList().sendFilesList(
+                                        fileAPI, filePath, ServerConnection.objectOutputStream
+                                );
+                                break;
+                            case "FILE_DOWNLOAD_REQUEST":
+                                //filePath is complete path including file name
+                                filePath = (String) ServerConnection.objectInputStream.readObject();
+                                new SendFile().sendFile(filePath, ServerConnection.objectOutputStream);
+                                break;
+                            case "FILE_TRANSFER_REQUEST":
+                                fileName = (String) ServerConnection.objectInputStream.readObject();
+                                long fileSize = (long) ServerConnection.objectInputStream.readObject();
+                                //not in thread, blocking action
+                                new ReceiveFile().receiveFile(
+                                        fileName, fileSize, ServerConnection.objectInputStream
+                                );
+                                break;
+                            case "VolumeController":
+                                int gain = (int) objectInputStream.readObject();
+                                 
+                                volumeController.setSystemVolume(gain);
                                 break;
                         }
                     } else {
