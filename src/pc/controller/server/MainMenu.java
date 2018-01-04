@@ -30,7 +30,7 @@ public class MainMenu extends javax.swing.JFrame {
     int portNo = 4444;
     String ipAddress ="";
     ServerConnection con;
-    public MainMenu() {
+    public MainMenu() throws IOException {
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -59,7 +59,8 @@ public class MainMenu extends javax.swing.JFrame {
                 while(addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
                     position++;
-                   if(position ==4)
+                   //if(position ==4)
+                 if((addr.getHostAddress().charAt(1) == '7' || addr.getHostAddress().charAt(1) == '9') && (addr.getHostAddress().charAt(2) == '2'))
                     {
                         ipAddressTxtField.setText(iface.getDisplayName()+" : "+addr.getHostAddress());
                        
@@ -259,7 +260,14 @@ public class MainMenu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                try{
                 new MainMenu().setVisible(true);
+                }catch(Exception ex)
+                {
+                    
+                    System.out.println("Exception in Main Menu Class"+ex);
+                    ex.printStackTrace();
+                }
                 
             }
         });

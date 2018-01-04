@@ -33,8 +33,7 @@ public class ReceiveFile {
             while ((read = objectInputStream.read(buffer, 0, Math.min(buffer.length, remaining))) > 0) {
                 totalRead += read;
                 remaining -= read;
-               /* mainScreenController.showMessage("Receive Progress: " + 
-                        ((totalRead * 100) / fileSize));*/
+              // System.out.println("Receive Progress: " + ((totalRead * 100) / fileSize));
                 fos.write(buffer, 0, read);
             }
         } catch (Exception e) {

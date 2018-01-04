@@ -15,6 +15,7 @@ import java.awt.Toolkit;
 import java.io.BufferedReader;
 
 import java.io.DataInputStream;
+import java.io.IOException;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -42,8 +43,10 @@ public class ServerConnection {
     String readLn;
     String readMenu;
     String message, filePath, fileName;
+    DBHandler db;
     FileAPI fileAPI = new FileAPI();
     VolumeController volumeController= new VolumeController();
+    String android_id ="";
    // DataInputStream dis;
    
     
@@ -58,9 +61,10 @@ public class ServerConnection {
       }
      
     
-     void connectionEstablishing(int port)
+     void connectionEstablishing(int port) throws IOException
      {
          try{
+             
               serverSocket = new ServerSocket(port);
               socketHandler = new SocketHandler ();
               
@@ -77,6 +81,7 @@ public class ServerConnection {
                outputStream = socket.getOutputStream();
                objectOutputStream = new ObjectOutputStream(outputStream);
                power = new Power();
+               db= new DBHandler();
                
                
                   
@@ -88,6 +93,8 @@ public class ServerConnection {
                     int keyCode;
                     if (message != null) {
                         switch (message) {
+                                                           
+                                
                             case "LEFT_CLICK":
                                 mouseControl.leftClick();
                                 break;
@@ -180,15 +187,13 @@ public class ServerConnection {
                             case "SCREENSHOT_REQUEST":
                                 new Screenshot().sendScreenshot(objectOutputStream);
                                 break;
-                                
-                                 case "FILE_DOWNLOAD_LIST_FILES":
+                            case "FILE_DOWNLOAD_LIST_FILES":
                                 filePath = (String) ServerConnection.objectInputStream.readObject();
+                                System.out.println("FILE_DOWNLOAD_LIST_FILES");
                                 if (filePath.equals("/")) {
                                     filePath = fileAPI.getHomeDirectoryPath();
                                 }
-                                new SendFileList().sendFilesList(
-                                        fileAPI, filePath, ServerConnection.objectOutputStream
-                                );
+                                new SendFileList().sendFilesList(fileAPI, filePath, ServerConnection.objectOutputStream);
                                 break;
                             case "FILE_DOWNLOAD_REQUEST":
                                 //filePath is complete path including file name
@@ -207,6 +212,47 @@ public class ServerConnection {
                                 int gain = (int) objectInputStream.readObject();
                                  
                                 volumeController.setSystemVolume(gain);
+                                break;
+                            case "DB_Mob_Detail":
+                                String dev_name = (String) objectInputStream.readObject();
+                                android_id = (String) objectInputStream.readObject();
+                                db.addNewDevice(dev_name, android_id);
+                                break;
+                            case "DB_User_Insert":
+                                String username = (String) objectInputStream.readObject();
+                                String pass = (String) objectInputStream.readObject(); 
+                                boolean b=false;
+                                if(db.getCountRowsClients()==0)
+                                b=db.addNewClient(username, pass, true,db.getDeviceID(android_id));
+                                else
+                                   b=db.addNewClient(username, pass, false,db.getDeviceID(android_id));
+                                if(b)
+                                {
+                                    String reg_msg = "Registered";
+                                    ServerConnection.objectOutputStream.writeObject(reg_msg);
+                                    ServerConnection.objectOutputStream.flush();
+                                }
+                                else
+                                {
+                                    String reg_msg = "Registration_Failed";
+                                    ServerConnection.objectOutputStream.writeObject(reg_msg);
+                                    ServerConnection.objectOutputStream.flush();
+                                }
+                                
+                                break;
+                            case "DB_Login":
+                                String auth_username = (String) objectInputStream.readObject();
+                                String auth_pass = (String) objectInputStream.readObject();
+                                if(db.loginAuth(auth_username, auth_pass))
+                                {
+                                    String reg_msg = "Login_Successfully";
+                                    ServerConnection.objectOutputStream.writeObject(reg_msg);
+                                    ServerConnection.objectOutputStream.flush();
+                                }else{
+                                    String reg_msg = "Invalid_Username/Password";
+                                    ServerConnection.objectOutputStream.writeObject(reg_msg);
+                                    ServerConnection.objectOutputStream.flush();
+                                }
                                 break;
                         }
                     } else {
@@ -227,13 +273,14 @@ public class ServerConnection {
                     JOptionPane.showMessageDialog(null, "Client is not connected");
                 }
               
-         }catch(Exception ex)
+         }catch(Exception ex) 
          {
              JOptionPane.showMessageDialog(null,"Exception occur"+ex,"Error",JOptionPane.ERROR_MESSAGE);
              ex.printStackTrace();
              
              
-                    MainMenu. conStatusTextField.setText("Error in Connection");
+                    MainMenu. conStatusTextField.setText("Exception Occur");
+                    
                     
              
          }

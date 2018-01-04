@@ -17,6 +17,7 @@ public class FileAPI {
     
     public String getHomeDirectoryPath() {
         String path = System.getProperty("user.home");
+        //System.out.println("path = "+path);
         return path;
     }
     
