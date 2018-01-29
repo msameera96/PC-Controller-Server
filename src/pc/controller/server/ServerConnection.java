@@ -47,6 +47,12 @@ public class ServerConnection {
     FileAPI fileAPI = new FileAPI();
     VolumeController volumeController= new VolumeController();
     String android_id ="";
+    String auth_username="";
+    String auth_pass="";
+    String activity_name ="";
+    String log_date ="";
+    String log_time="";
+    
    // DataInputStream dis;
    
     
@@ -69,7 +75,9 @@ public class ServerConnection {
               socketHandler = new SocketHandler ();
               
               MouseKeyboardControl key=new MouseKeyboardControl();
-          
+              DateTime dt = new DateTime();
+              //System.out.println(dt.getDate());
+              //System.out.println(dt.getTime());
                 MainMenu.conStatusTextField.setText("Server is up! Waiting for connection...");
                 socket = serverSocket.accept();
                 socketHandler.setSocket(socket);
@@ -155,6 +163,32 @@ public class ServerConnection {
                             case "LEFT_ARROW_KEY":
                                 mouseControl.pressLeftArrowKey();
                                 break;
+                            
+                            case "CTRL_A":
+                                mouseControl.ctrlA();
+                                break;
+                            case "CTRL_B":
+                                mouseControl.ctrlB();
+                                break;
+                            case "CTRL_C":
+                                mouseControl.ctrlC();
+                                break;
+                            case "CTRL_I":
+                                mouseControl.ctrlI();
+                                break;
+                            case "CTRL_S":
+                                mouseControl.ctrlS();
+                                break;
+                            case "CTRL_U":
+                                mouseControl.ctrlU();
+                                break;
+                            case  "CTRL_V":
+                                mouseControl.ctrlV();
+                                break;
+                            case  "CTRL_X":
+                                mouseControl.ctrlX();
+                                break;
+                                
                             case "DOWN_ARROW_KEY":
                                 mouseControl.pressDownArrowKey();
                                 break;
@@ -164,6 +198,19 @@ public class ServerConnection {
                             case "UP_ARROW_KEY":
                                 mouseControl.pressUpArrowKey();
                                 break;
+                            case "SHIFT_LEFT":
+                                mouseControl.shiftLeft();
+                                break;
+                            case "SHIFT_DOWN":
+                                mouseControl.shiftDOWN();
+                                break;
+                            case "SHIFT_RIGHT":
+                                mouseControl.shiftRight();
+                                break;
+                            case "SHIFT_UP":
+                                mouseControl.shiftUp();
+                                break;
+                                
                             case "F5_KEY":
                                 mouseControl.pressF5Key();
                                 break;
@@ -241,18 +288,30 @@ public class ServerConnection {
                                 
                                 break;
                             case "DB_Login":
-                                String auth_username = (String) objectInputStream.readObject();
-                                String auth_pass = (String) objectInputStream.readObject();
+                                auth_username = (String) objectInputStream.readObject();
+                                auth_pass = (String) objectInputStream.readObject();
                                 if(db.loginAuth(auth_username, auth_pass))
                                 {
                                     String reg_msg = "Login_Successfully";
                                     ServerConnection.objectOutputStream.writeObject(reg_msg);
                                     ServerConnection.objectOutputStream.flush();
+                                    db.addNewSession(db.getUserId(auth_username, auth_pass), dt.getTime(), dt.getDate());
                                 }else{
                                     String reg_msg = "Invalid_Username/Password";
                                     ServerConnection.objectOutputStream.writeObject(reg_msg);
                                     ServerConnection.objectOutputStream.flush();
                                 }
+                                break;
+                            
+                            case "log_started":
+                               activity_name = (String) objectInputStream.readObject();
+                               log_date=dt.getDate();
+                               log_time = dt.getTime();
+                                db.addNewLog(activity_name,log_date , log_time , db.getSessionId(db.getUserId(auth_username, auth_pass)));                              
+                                
+                                break;
+                            case "log_ended":
+                                db.addEndTimeOfLog(db.getLogId(activity_name, log_date, log_time, db.getSessionId(db.getUserId(auth_username, auth_pass))), dt.getTime(), dt.getDate());
                                 break;
                         }
                     } else {

@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 
 public class MainMenu extends javax.swing.JFrame {
     public static String conStatus ="Not Connected";
+    public static boolean  istrue= false;
 
     /**
      * Creates new form MainMenu
@@ -30,14 +31,20 @@ public class MainMenu extends javax.swing.JFrame {
     int portNo = 4444;
     String ipAddress ="";
     ServerConnection con;
+    DatabaseViewerInternalFrame dbIF;
+    DeviceDetailInternalFrame ddIF;
+    LoginForm loginForm;
     public MainMenu() throws IOException {
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
+        isLoggedInTxtField.setText("No admin has logged in");
+        setTitle("PC Controller Server");
        setIpAddress();
         con = new ServerConnection();
         con.connectionEstablishing(portNo);
+        
         
     }
     void setIpAddress()
@@ -107,9 +114,15 @@ public class MainMenu extends javax.swing.JFrame {
         ipAddressTxtField = new javax.swing.JTextField();
         connectionStatusLabel1 = new javax.swing.JLabel();
         conStatusTextField = new javax.swing.JTextField();
+        dbPanel = new javax.swing.JPanel();
+        jDesktopPane1 = new javax.swing.JDesktopPane();
+        displayDBBtn = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        isLoggedInTxtField = new javax.swing.JTextField();
+        loggedOutBtn = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -155,6 +168,76 @@ public class MainMenu extends javax.swing.JFrame {
         conStatusTextField.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         conStatusTextField.setText(" ");
 
+        dbPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 880, Short.MAX_VALUE)
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 352, Short.MAX_VALUE)
+        );
+
+        displayDBBtn.setText("Display all Logs");
+        displayDBBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayDBBtnActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Display All Devices details");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        isLoggedInTxtField.setEditable(false);
+        isLoggedInTxtField.setForeground(new java.awt.Color(0, 0, 255));
+
+        loggedOutBtn.setText("Logged Out");
+        loggedOutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loggedOutBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout dbPanelLayout = new javax.swing.GroupLayout(dbPanel);
+        dbPanel.setLayout(dbPanelLayout);
+        dbPanelLayout.setHorizontalGroup(
+            dbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jDesktopPane1)
+            .addGroup(dbPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(isLoggedInTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(loggedOutBtn)
+                .addGap(18, 18, 18)
+                .addComponent(displayDBBtn)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        dbPanelLayout.setVerticalGroup(
+            dbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dbPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(displayDBBtn)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel1)
+                    .addComponent(isLoggedInTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(loggedOutBtn))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout downPanelLayout = new javax.swing.GroupLayout(downPanel);
         downPanel.setLayout(downPanelLayout);
         downPanelLayout.setHorizontalGroup(
@@ -168,7 +251,8 @@ public class MainMenu extends javax.swing.JFrame {
                 .addGroup(downPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(ipAddressTxtField)
                     .addComponent(conStatusTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
+            .addComponent(dbPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         downPanelLayout.setVerticalGroup(
             downPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,7 +265,8 @@ public class MainMenu extends javax.swing.JFrame {
                 .addGroup(downPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(connectionStatusLabel1)
                     .addComponent(conStatusTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(416, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(dbPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         ipAddressLabel.getAccessibleContext().setAccessibleName("");
@@ -206,9 +291,6 @@ public class MainMenu extends javax.swing.JFrame {
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -229,6 +311,45 @@ public class MainMenu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void displayDBBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayDBBtnActionPerformed
+        // TODO add your handling code here:
+        
+        if(!istrue)
+        loginForm = new LoginForm();
+        if(istrue){
+        isLoggedInTxtField.setText("Admin is logged");
+        dbIF = new DatabaseViewerInternalFrame();
+        jDesktopPane1.add(dbIF);
+        dbIF.show();
+        dbIF.displayAllLogs();}
+    }//GEN-LAST:event_displayDBBtnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(!istrue)
+        loginForm = new LoginForm();
+        if(istrue){
+            isLoggedInTxtField.setText("Admin is logged");
+        ddIF = new DeviceDetailInternalFrame();
+        
+        jDesktopPane1.add(ddIF);
+        ddIF.show();
+        ddIF.showDeviceDetails();
+        }
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void loggedOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loggedOutBtnActionPerformed
+        // TODO add your handling code here:
+        isLoggedInTxtField.setText("No admin has logged in");
+        istrue = false;
+        if(ddIF!=null)
+        ddIF.dispose();
+        if(dbIF!=null)
+        dbIF.dispose();
+    }//GEN-LAST:event_loggedOutBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,12 +398,18 @@ public class MainMenu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JTextField conStatusTextField;
     private javax.swing.JLabel connectionStatusLabel1;
+    private javax.swing.JPanel dbPanel;
+    private javax.swing.JButton displayDBBtn;
     private javax.swing.JPanel downPanel;
     private javax.swing.JLabel ipAddressLabel;
     private javax.swing.JTextField ipAddressTxtField;
+    private javax.swing.JTextField isLoggedInTxtField;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JButton loggedOutBtn;
     private javax.swing.JPanel mainBackgroundPanel;
     private javax.swing.JLabel mainTitleLabel;
     private javax.swing.JPanel topPanel;

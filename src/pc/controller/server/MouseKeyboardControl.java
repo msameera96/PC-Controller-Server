@@ -75,6 +75,106 @@ public class MouseKeyboardControl {
         robot.keyRelease(KeyEvent.VK_SHIFT);
         robot.keyRelease(KeyEvent.VK_CONTROL);
     }
+    
+    public void ctrlA() {
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_A);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_A);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+    }
+    
+     public void ctrlS() {
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_S);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_S);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+    }
+     
+     
+     public void ctrlB() {
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_B);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_B);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+    }
+     
+     public void ctrlI() {
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_I);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_I);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+    }
+     
+     public void ctrlU() {
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_U);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_U);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+    }
+     
+     
+     public void ctrlC() {
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_C);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_C);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+    }
+     
+      public void ctrlX() {
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_X);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_X);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+    }
+     
+     public void ctrlV() {
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_V);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+    }
+     
+     public void shiftLeft() {
+        robot.keyPress(KeyEvent.VK_SHIFT);
+        robot.keyPress(KeyEvent.VK_LEFT);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_LEFT);
+        robot.keyRelease(KeyEvent.VK_SHIFT);
+    }
+     
+     public void shiftRight() {
+        robot.keyPress(KeyEvent.VK_SHIFT);
+        robot.keyPress(KeyEvent.VK_RIGHT);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_LEFT);
+        robot.keyRelease(KeyEvent.VK_RIGHT);
+    }
+     
+     public void shiftUp() {
+        robot.keyPress(KeyEvent.VK_SHIFT);
+        robot.keyPress(KeyEvent.VK_UP);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_UP);
+        robot.keyRelease(KeyEvent.VK_SHIFT);
+    }
+     
+     public void shiftDOWN() {
+        robot.keyPress(KeyEvent.VK_SHIFT);
+        robot.keyPress(KeyEvent.VK_DOWN);
+        robot.delay(10);
+        robot.keyRelease(KeyEvent.VK_LEFT);
+        robot.keyRelease(KeyEvent.VK_DOWN);
+    }
+     
+    
     public void altF4() {
         robot.keyPress(KeyEvent.VK_ALT);
         robot.keyPress(KeyEvent.VK_F4);
