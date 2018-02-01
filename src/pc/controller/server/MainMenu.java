@@ -28,7 +28,7 @@ public class MainMenu extends javax.swing.JFrame {
     InetAddress addr;
     
     
-    int portNo = 4444;
+    public static int portNo = 4444;
     String ipAddress ="";
     ServerConnection con;
     DatabaseViewerInternalFrame dbIF;
@@ -43,7 +43,8 @@ public class MainMenu extends javax.swing.JFrame {
         setTitle("PC Controller Server");
        setIpAddress();
         con = new ServerConnection();
-        con.connectionEstablishing(portNo);
+        //con.connectionEstablishing(portNo);
+        con.setConnectionDetails(portNo);
         
         
     }

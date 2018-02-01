@@ -44,6 +44,7 @@ public class LoginForm extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         loginBtn = new javax.swing.JButton();
         noteLbl = new javax.swing.JLabel();
+        cancelBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +91,14 @@ public class LoginForm extends javax.swing.JFrame {
         noteLbl.setForeground(new java.awt.Color(255, 0, 0));
         noteLbl.setText("Note : Only admin should login");
 
+        cancelBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        cancelBtn.setText("Cancel");
+        cancelBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -102,7 +111,10 @@ public class LoginForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(noteLbl)
-                    .addComponent(loginBtn)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(loginBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(cancelBtn))
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(usernameTxtFld)
                         .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)))
@@ -122,7 +134,9 @@ public class LoginForm extends javax.swing.JFrame {
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
-                .addComponent(loginBtn)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(loginBtn)
+                    .addComponent(cancelBtn))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
 
@@ -198,6 +212,12 @@ public class LoginForm extends javax.swing.JFrame {
         
     }//GEN-LAST:event_loginBtnActionPerformed
 
+    private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
+        // TODO add your handling code here:
+        dispose();
+                   setVisible(false);
+    }//GEN-LAST:event_cancelBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -235,6 +255,7 @@ public class LoginForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel adminLoginJLbl;
+    private javax.swing.JButton cancelBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

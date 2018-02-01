@@ -103,9 +103,9 @@ public class DBHandler {
         Statement stmt=con.createStatement();
             ResultSet rs;
             rs = stmt.executeQuery(sqlQuery);            
-            while(rs.next()) {
-               count++;
-            }
+            rs.next();
+               count = rs.getInt("COUNT");
+            
         }catch(Exception ex){System.out.println("Exception while getting numbers of counts from user table"+ex);}
         return count;
         
@@ -289,8 +289,8 @@ public class DBHandler {
   ArrayList <UserLogDetails> getLogDetails()
   {
       String sql = "SELECT username, s.start_time, s.start_date, act_name, l.start_date, l.start_time, end_time, "
-              + "end_date from tbl_user as u join tbl_session as s on (u.user_id = s.user_id) "
-              + "join tbl_log as l on (s.sess_id = l.session_id) join tbl_log_end_dtl as le on (le.log_id = l.log_id);";
+              + "end_date from tbl_user as u full outer join tbl_session as s on (u.user_id = s.user_id) "
+              + "full outer join tbl_log as l on (s.sess_id = l.session_id) full outer join tbl_log_end_dtl as le on (le.log_id = l.log_id);";
       ArrayList <UserLogDetails> userLogList = new ArrayList<>();
       try{
           Statement statement = con.createStatement();

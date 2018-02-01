@@ -52,6 +52,7 @@ public class ServerConnection {
     String activity_name ="";
     String log_date ="";
     String log_time="";
+    CommandPrompt cmd;
     
    // DataInputStream dis;
    
@@ -65,31 +66,49 @@ public class ServerConnection {
       {
           
       }
+      
+      void setConnectionDetails(int port)
+      {
+          try{
+              
+                    serverSocket = new ServerSocket(port);
+                    socketHandler = new SocketHandler ();
+                    MainMenu.conStatusTextField.setText("Server is up! Waiting for connection...");
+                    socket = serverSocket.accept();
+                    socketHandler.setSocket(socket);
+                    if(socket.isConnected()){
+                    MainMenu.conStatusTextField.setText("Connected");
+                    inputStream = socket.getInputStream();
+                    objectInputStream = new ObjectInputStream(inputStream);
+                    outputStream = socket.getOutputStream();
+                    objectOutputStream = new ObjectOutputStream(outputStream);
+                    moduleFunctionality();
+                    }
+          }catch(Exception ex)
+          {              
+              ex.printStackTrace();
+              resetConnection();
+              
+              
+          }
+          
+                
+      }
      
     
-     void connectionEstablishing(int port) throws IOException
+     void moduleFunctionality() throws IOException
      {
          try{
              
-              serverSocket = new ServerSocket(port);
-              socketHandler = new SocketHandler ();
-              
+             
+               
+               cmd = new CommandPrompt();
+                mouseControl = new MouseKeyboardControl();
+                
+               power = new Power();
+               db= new DBHandler();                
               MouseKeyboardControl key=new MouseKeyboardControl();
               DateTime dt = new DateTime();
-              //System.out.println(dt.getDate());
-              //System.out.println(dt.getTime());
-                MainMenu.conStatusTextField.setText("Server is up! Waiting for connection...");
-                socket = serverSocket.accept();
-                socketHandler.setSocket(socket);
-                if(socket.isConnected()){
-                MainMenu.conStatusTextField.setText("Connected");
-                mouseControl = new MouseKeyboardControl();
-                inputStream = socket.getInputStream();
-               objectInputStream = new ObjectInputStream(inputStream);
-               outputStream = socket.getOutputStream();
-               objectOutputStream = new ObjectOutputStream(outputStream);
-               power = new Power();
-               db= new DBHandler();
                
                
                   
@@ -135,8 +154,8 @@ public class ServerConnection {
                                 mouseControl.mouseMove((int) xCord, (int) yCord);
                                 break;
                             case "KEY_PRESS":
-                               /* keyCode = (int) objectInputStream.readObject();
-                                mouseControl.keyPress(keyCode);*/
+                                keyCode = (int) objectInputStream.readObject();
+                                mouseControl.keyPress(keyCode);
                                 break;
                             case "KEY_RELEASE":
                                 keyCode = (int) objectInputStream.readObject();
@@ -313,6 +332,14 @@ public class ServerConnection {
                             case "log_ended":
                                 db.addEndTimeOfLog(db.getLogId(activity_name, log_date, log_time, db.getSessionId(db.getUserId(auth_username, auth_pass))), dt.getTime(), dt.getDate());
                                 break;
+                            case "CMD":
+                                //System.out.println("Before CMD");
+                                String command = (String) objectInputStream.readObject();
+                                //System.out.println("After CMD");
+                                cmd.execCmd(command);
+                                break;
+                                
+                                
                         }
                     } else {
                          MainMenu. conStatusTextField.setText("Module is invalid");
@@ -320,17 +347,13 @@ public class ServerConnection {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    socket.close();
-                    serverSocket.close();
                     MainMenu. conStatusTextField.setText("Error in Connection");
-                    break;
+                    resetConnection();
+                    //break;
                 }
+                
             };
-          }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "Client is not connected");
-                }
+        
               
          }catch(Exception ex) 
          {
@@ -346,6 +369,40 @@ public class ServerConnection {
         
         
         
+     }
+     
+     
+    public void resetConnection()
+     {
+         try{
+             if(socket !=null){
+                 socket.close();
+             }
+             if(serverSocket != null)
+             {
+                 serverSocket.close();
+             }
+             if(inputStream != null){
+                 inputStream.close();
+             }
+             if(outputStream != null)
+             {
+                 outputStream.close();
+             }
+             if(objectInputStream != null)
+             {
+                 objectInputStream.close();
+             }
+             if(objectOutputStream != null)
+             {
+                 objectOutputStream.close();
+             }
+             setConnectionDetails(MainMenu.portNo);
+             
+         }catch(Exception ex)
+         {
+             ex.printStackTrace();
+         }
      }
      
      

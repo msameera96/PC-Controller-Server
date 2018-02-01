@@ -20,7 +20,13 @@ import javax.imageio.ImageIO;
  * @author sameer
  */
 public class Screenshot {
+    ServerConnection serverCon;
+    Screenshot(){
+       serverCon  = new ServerConnection();
+    }
+        
     public void sendScreenshot(final ObjectOutputStream out) {
+        
         new Thread() {
             @Override
             public void run() {
@@ -33,7 +39,7 @@ public class Screenshot {
                                     Toolkit.getDefaultToolkit()
                                                     .getScreenSize()));
                     ByteArrayOutputStream os = new ByteArrayOutputStream();
-                    ImageIO.write(screenshot, "png", os);
+                    ImageIO.write(screenshot, "jpg", os);
                     is = new ByteArrayInputStream(os.toByteArray());
                     int fileSize = os.size();
                     //sending fileSize first
@@ -57,7 +63,8 @@ public class Screenshot {
                     
                 } catch (Exception e) {
                     e.printStackTrace();
-                    MainMenu. conStatusTextField.setText("Error in Connection");
+                    MainMenu. conStatusTextField.setText("Error in Connection");                    
+                    serverCon.resetConnection();
                 } finally {
                     try {
                         if (is != null) {
@@ -66,6 +73,7 @@ public class Screenshot {
                     } catch (Exception e) {
                         e.printStackTrace();
                         MainMenu. conStatusTextField.setText("Error in Connection");
+                        serverCon.resetConnection();
                     }
                 }
             }
