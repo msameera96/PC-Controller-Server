@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
  */
 public class ReceiveFile {
     
+    
      public void receiveFile(final String fileName, long fileSize, 
             ObjectInputStream objectInputStream) {
         FileOutputStream fos = null;
@@ -38,12 +39,16 @@ public class ReceiveFile {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            ServerConnection serverCon  = new ServerConnection();
+           serverCon.resetConnection();
         } finally {
             try {
                 if (fos != null) {
                     fos.close();
                 }
             } catch (Exception e) {
+                ServerConnection serverCon  = new ServerConnection();
+           serverCon.resetConnection();
                 e.printStackTrace();
             }
         }
